@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.team.ms.dao.ForumMapper">
+
+    <insert id="insertForum" parameterType="com.team.ms.pojo.Forum">
+        insert into forum(forumname,cid,holdtime,location,subject,introduction)
+        values (#{forumname},#{cid},#{holdtime},#{location},#{subject},#{introduction});
+    </insert>
+
+    <delete id="deleteForumById" parameterType="String">
+        delete from forum where fid=#{fid}
+    </delete>
+
+    <update id="updateByObject" parameterType="com.team.ms.pojo.Forum">
+        update forum
+        set forumname=#{forumname},cid=#{cid},holdtime=#{holdtime},location=#{location},subject=#{subject},introduction=#{introduction}
+        where fid=#{fid}
+    </update>
+
+    <update id="updateByMap" parameterType="map">
+        update  forum
+        <set>
+            <if test="forumname !=null">forumname=#{forumname},</if>
+            <if test="cid !=null">cid=#{cid},</if>
+            <if test="holdtime !=null">holdtime=#{holdtime},</if>
+            <if test="location !=null">location=#{location},</if>
+            <if test="subject !=null">subject=#{subject},</if>
+            <if test="introduction !=null">introduction=#{introduction},</if>
+        </set>
+        where fid=#{fid}
+    </update>
+
+    <select id="selectForumById" parameterType="String" resultType="com.team.ms.pojo.Forum">
+        select * from forum where fid=#{fid}
+    </select>
+
+    <select id="selectForumByMap" parameterType="map" resultType="com.team.ms.pojo.Forum">
+        select * from forum
+        <where>
+            <if test="forumname !=null">and forumname=#{forumname}</if>
+            <if test="cid !=null">and cid=#{cid}</if>
+            <if test="holdtime !=null">and holdtime=#{holdtime}</if>
+            <if test="location !=null">and location=#{location}</if>
+            <if test="subject !=null">and subject=#{subject}</if>
+            <if test="introduction !=null">and introduction=#{introduction}</if>
+        </where>
+    </select>
+
+    <select id="getOneForumparticipants" resultType="int" parameterType="String">
+        select count(*) from fu
+        left join forum on fu.fid=forum.fid
+        where forum.cid=#{cid}
+    </select>
+
+    <select id="getForumNameByCid" parameterType="String" resultType="String">
+        select forumname from forum where cid=#{cid}
+    </select>
+
+    <select id="getAllFid" resultType="String">
+        select fid from forum
+    </select>
+
+    <select id="getForumNameByFid" resultType="String" parameterType="String">
+        select forumname from forum where fid=#{fid}
+    </select>
+
+</mapper>
